@@ -7,7 +7,7 @@ const format = (str) => str.replace(/[^a-zA-Z ]/g, '').toLowerCase();
 function userGenerator() {
   const firstname = faker.name.firstName();
   const lastname = faker.name.lastName();
-  const emailId = `${format(firstname)}.${format(lastname)}@dont.travel`;
+  const emailId = `${format(firstname)}.${format(lastname)}@yourstories.space`;
   const password = faker.internet.password();
   return {
     firstname,
@@ -20,16 +20,16 @@ function userGenerator() {
 async function waitForEmailVerificationLink(emailId, maxWaitMs = 120 * 1000) {
   return new Promise((resolve, reject) => {
     async function fn() {
-      const requestUrl = `https://emailapi.io/api/otp`;
+      const requestUrl = `http://localhost:3000/api/otp`;
       const params = {
         email: emailId,
-        search_query: 'from: noreply@airtable.com subject: (Please confirm your email)',
+        search_query: 'from:noreply@airtable.com subject:(Please confirm your email)',
         configurations: [
           {
             fields: [
               {
                 selector:
-                  'table > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(2) > div:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > a:nth-child(4)',
+                  'table > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(1) > a:nth-child(4)',
                 fieldName: 'verify',
                 fieldKey: 'verify',
               },
@@ -74,7 +74,7 @@ async function doSignup() {
     {headless: false}
   );
   const page = await browser.newPage();
-  await page.goto('https://airtable.com/invite/r/Vl6Kw5S3');
+  await page.goto('https://airtable.com/invite/r/hW39TmDm');
 
   const { firstname, lastname, password, emailId} = userGenerator();
 
@@ -106,7 +106,7 @@ async function doSignup() {
 
 (async () => {
   // bootstrap
-  [...new Array(24)]
+  [...new Array(1)]
   .reduce(async (previousPromise) => {
     await previousPromise;
     await doSignup();
